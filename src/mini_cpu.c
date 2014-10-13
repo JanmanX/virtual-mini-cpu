@@ -1,7 +1,5 @@
 #include "mini_cpu.h"
 
-typedef unsigned char byte;
-
 struct mini_cpu *new_cpu(int memory_size)
 {
 	struct mini_cpu *cpu=(struct mini_cpu*)malloc(
@@ -17,6 +15,18 @@ struct mini_cpu *new_cpu(int memory_size)
 
 	cpu->mem = mem;
 	cpu->mem_size = memory_size;
+
+	cpu->PC = 0x01; /* Base address */
+	cpu->R0 = 0;
+	cpu->R1 = 0;
+
+	cpu->_overflow = false;
+	cpu->_underflow = false;
+	cpu->_signed = false;
+	cpu->_halt = false;
+	cpu->_reserved_address = 0;
+	cpu->_address_ceiling = memory_size-2;
+
 	return cpu;
 }
 
@@ -31,9 +41,17 @@ void cpu_reset(struct mini_cpu * cpu)
 {
 	CPU_CHECK(cpu);
 
-	cpu->PC = 0;
+	cpu->PC = 0x01; /* Base address */
 	cpu->R0 = 0;
 	cpu->R1 = 0;
+
+	cpu->_overflow = false;
+	cpu->_underflow = false;
+	cpu->_signed = false;
+	cpu->_halt = false;
+	cpu->_reserved_address = 0;
+	cpu->_address_ceiling = cpu->mem_size-2;
+
 	mem_clear(cpu);
 }
 
@@ -41,8 +59,77 @@ byte fetch(struct mini_cpu* cpu)
 {
 	byte opcode = 0;
 	opcode = mem_read(cpu, cpu->PC++);
+
+	if(cpu->PC > cpu->_address_ceiling) {
+		
+	}
+
 	return opcode;	
 }
+
+void decode(struct mini_cpu* cpu, byte op_code)
+{
+	if(cpu->_halt == true) return;
+
+	switch(op_code) {
+		case HALT:
+			cpu->_halt = true;
+			break;
+
+		case LOAD0:
+			cpu->R0 = mem_read(cpu, cpu->PC++);
+			break;
+
+		case LOAD1:
+			cpu->R1 = mem_read(cpu, cpu->PC++);
+			break;
+
+		case ADD:
+			add(cpu);
+			break;
+
+		case STORE:
+			store(cpu);
+			break;
+		
+		case PRINT:
+			print(cpu);
+			break;
+	}
+}
+
+void run(struct mini_cpu* cpu)
+{
+	while(cpu->_halt == false) {
+		mem_write(cpu, cpu->_reserved_address, fetch(cpu));
+
+		decode(cpu, mem_read(cpu,cpu->_reserved_address));
+	}
+}
+
+void halt(struct mini_cpu* cpu)
+{
+	cpu->_halt = true;
+}
+
+void add(struct mini_cpu* cpu)
+{
+	cpu->R0 += cpu->R1;
+}
+
+void store(struct mini_cpu* cpu)
+{
+	cpu->R1 = mem_read(cpu, cpu->PC++);
+	mem_write(cpu, cpu->R1, cpu->R0);
+}
+
+void print(struct mini_cpu* cpu)
+{
+	cpu->R1 = mem_read(cpu, cpu->PC++);
+	cpu->R0 = mem_read(cpu, cpu->R1);
+	printf("%d\n", cpu->R0);
+}
+
 
 /**
  * Memory operations
@@ -85,4 +172,6 @@ void mem_print(struct mini_cpu *cpu)
 	int i = 0;
 	for(; i < cpu->mem_size; ++i)
 		printf("%d:\t 0x%02x\t ",i,cpu->mem[i]);
+
+	printf("\n");
 }
