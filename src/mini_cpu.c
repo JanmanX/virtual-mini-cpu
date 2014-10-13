@@ -61,7 +61,7 @@ byte fetch(struct mini_cpu* cpu)
 	opcode = mem_read(cpu, cpu->PC++);
 
 	if(cpu->PC > cpu->_address_ceiling) {
-		
+		halt(cpu);	
 	}
 
 	return opcode;	
@@ -114,7 +114,7 @@ void halt(struct mini_cpu* cpu)
 
 void add(struct mini_cpu* cpu)
 {
-	cpu->R0 += cpu->R1;
+	cpu->R0 = cpu->R0 + cpu->R1;
 }
 
 void store(struct mini_cpu* cpu)
@@ -171,7 +171,7 @@ void mem_print(struct mini_cpu *cpu)
 
 	int i = 0;
 	for(; i < cpu->mem_size; ++i)
-		printf("%d:\t 0x%02x\t ",i,cpu->mem[i]);
+		printf("%3d: 0x%02x\n",i,cpu->mem[i]);
 
 	printf("\n");
 }

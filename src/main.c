@@ -16,27 +16,25 @@ int main()
 	  3
 	  5 12
 	  6 12
-	  4
 	  0
 	 ***/
 
-	mem_write(cpu,1,1);
+	mem_write(cpu,1,LOAD0); 	/* R0 = 1 */
 	mem_write(cpu,2,1);
-	mem_write(cpu,3,2);
+	mem_write(cpu,3,LOAD1);		/* R1 = 2 */
 	mem_write(cpu,4,2);
-	mem_write(cpu,5,3);
-	mem_write(cpu,6,5);
-	mem_write(cpu,7,12);
-	mem_write(cpu,8,6);
-	mem_write(cpu,9,12);
-	mem_write(cpu,10,4);
-	mem_write(cpu,11,0);
-
-	mem_print(cpu);
-
+	mem_write(cpu,5,ADD);
+	mem_write(cpu,6,STORE);		/* STORE R0 @ 12 */
+	mem_write(cpu,7,30);
+	mem_write(cpu,8,PRINT);		/* PRINT [12] */
+	mem_write(cpu,9,30);
+	mem_write(cpu,10,HALT);
 	printf("Starting...\n");	
 	run(cpu);
 	printf("Complete...\n");
+
+	mem_print(cpu);
+
 
 	free_cpu(cpu);
 	return 0;	
