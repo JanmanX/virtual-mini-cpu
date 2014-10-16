@@ -7,6 +7,11 @@ OBJECTS=$(wildcard src/*.o, $(SOURCES))
 
 all: $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o bin/$(EXECUTABLE)
+
+debug: $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -DDEBUG -o bin/$(EXECUTABLE)
+
+
 clean:
 	rm -vf bin/*
 	rm -vf src/*.o

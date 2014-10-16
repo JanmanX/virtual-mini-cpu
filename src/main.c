@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 	}
 
 	struct mini_cpu *cpu = new_cpu(255);
-	
+
 	byte* prog = (byte*)calloc(255, sizeof(byte));
 	int fd = open(argv[1], O_RDONLY);
 	if(fd == -1) {
@@ -26,9 +26,10 @@ int main(int argc, char **argv)
 	printf("%d bytes read. Starting CPU...\n",c);
 
 	load_program(cpu, prog);
-	mem_print(cpu);	
-
 	run(cpu);
+
+
+	mem_print(cpu);	
 
 
 	free_cpu(cpu);

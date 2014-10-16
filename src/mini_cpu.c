@@ -1,5 +1,18 @@
 #include "mini_cpu.h"
 
+#ifdef DEBUG
+char* OPCODE_STRING[] = { "HALT",
+	"LOAD0",
+	"LOAD1",
+	"ADD",
+	"BEEP",
+	"STORE",
+	"PRINT",
+	"MOV0",
+	"MOV1"}; 
+
+#endif
+
 struct mini_cpu *new_cpu(int memory_size)
 {
 	struct mini_cpu *cpu=(struct mini_cpu*)malloc(
@@ -71,6 +84,14 @@ void decode(struct mini_cpu* cpu, byte op_code)
 {
 	if(cpu->_halt == true) return;
 
+#ifdef DEBUG
+	printf("-- PC: %d\tR0: %d\tR1: %d\tOP: %s --\n",
+			cpu->PC,
+			cpu->R0,
+			cpu->R1,
+			OPCODE_STRING[cpu->PC]);
+#endif
+
 	switch(op_code) {
 		case HALT:
 			cpu->_halt = true;
@@ -104,6 +125,7 @@ void decode(struct mini_cpu* cpu, byte op_code)
 			print(cpu);
 			break;
 	}
+
 }
 
 void run(struct mini_cpu* cpu)
