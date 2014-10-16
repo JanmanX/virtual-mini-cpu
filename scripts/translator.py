@@ -7,6 +7,8 @@ STORE	= 5
 PRINT	= 6
 
 from sys import argv
+from string import *
+
 
 # Open files for reading
 fd = open(argv[1], 'r')
@@ -24,40 +26,49 @@ file_bytes = []
 current_line = 1
 
 for line in lines:
-	op = string.split(line)
+	op = split(line)
 	
-	op1 = lower(op[0])	
+	# Handle blank lines
+	if len(op) == 0:
+		continue
 
-	if op1 == "halt":
-		return HALT
-	elif op1 == "load0":
-		if len(op) < 2 or int(op[1]):
+	op1 = upper(op[0])	
+
+	if op1 == "HALT":
+		file_bytes.append(HALT)
+
+	elif str.isdigit(op1):
+		file_bytes.append(int(op1))		
+
+	elif op1 == "LOAD0":	
+		if len(op) < 2:
 			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
 		else:
 			file_bytes.append(LOAD0)
 			file_bytes.append(int(op[1]))
-	elif op1 == "load1":
-		if len(op) < 2 or int(op[1]):
+	
+	elif op1 == "LOAD1":
+		if len(op) < 2:
 			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
 		else:
 			file_bytes.append(LOAD1)
 			file_bytes.append(int(op[1]))
 
-	elif op1 == "add":
+	elif op1 == "ADD":
 		file_bytes.append(ADD)
 
-	elif op1 == "beep":
+	elif op1 == "BEEP":
 		file_bytes.append(BEEP)
 
-	elif op1 == "store":
-		if len(op) < 2 or int(op[1]):
+	elif op1 == "STORE":
+		if len(op) < 2:
 			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
 		else:
 			file_bytes.append(STORE)
 			file_bytes.append(int(op[1]))
 	
-	elif op1 == "print":
-		if len(op) < 2 or int(op[1]):
+	elif op1 == "PRINT":
+		if len(op) < 2:
 			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
 		else:
 			file_bytes.append(PRINT)
@@ -68,6 +79,9 @@ for line in lines:
 
 
 # Write the array to file
+print "Writing bytes to write:"
+print file_bytes
+
 byte_array = bytearray(file_bytes)
 fd_translated.write(byte_array)
 fd_translated.close()

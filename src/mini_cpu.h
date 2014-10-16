@@ -11,13 +11,13 @@
 #define false 0
 
 /* OP CODES */
-#define HALT 	0x00
-#define LOAD0 	0x01
-#define LOAD1 	0x02
-#define ADD	0x03
-#define BEEP 	0x04
-#define STORE	0x05
-#define PRINT	0x06
+#define HALT 	0x00 	/* Halts CPU */
+#define LOAD0 	0x01	/* Loads byte to R0 from mem[PC] */
+#define LOAD1 	0x02	/* Loads byte to R1 from mem[PC] */
+#define ADD	0x03	/* R0 = R1 + R0 */
+#define BEEP 	0x04	/* BEL */
+#define STORE	0x05	/* Stores R0 at mem[PC] */
+#define PRINT	0x06	/* Prints mem[PC] */
 
 
 typedef unsigned char byte;
