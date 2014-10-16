@@ -5,6 +5,8 @@ ADD	= 3
 BEEP 	= 4
 STORE	= 5
 PRINT	= 6
+MOV0	= 7
+MOV1 	= 8
 
 from sys import argv
 from string import *
@@ -52,6 +54,20 @@ for line in lines:
 			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
 		else:
 			file_bytes.append(LOAD1)
+			file_bytes.append(int(op[1]))
+
+	elif op1 == "MOV0":	
+		if len(op) < 2:
+			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
+		else:
+			file_bytes.append(MOV0)
+			file_bytes.append(int(op[1]))
+
+	elif op1 == "MOV1":	
+		if len(op) < 2:
+			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
+		else:
+			file_bytes.append(MOV1)
 			file_bytes.append(int(op[1]))
 
 	elif op1 == "ADD":

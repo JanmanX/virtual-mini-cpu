@@ -10,14 +10,21 @@
 #define true 1
 #define false 0
 
-/* OP CODES */
-#define HALT 	0x00 	/* Halts CPU */
-#define LOAD0 	0x01	/* Loads byte to R0 from mem[PC] */
-#define LOAD1 	0x02	/* Loads byte to R1 from mem[PC] */
-#define ADD	0x03	/* R0 = R1 + R0 */
-#define BEEP 	0x04	/* BEL */
-#define STORE	0x05	/* Stores R0 at mem[PC] */
-#define PRINT	0x06	/* Prints mem[PC] */
+/* 
+ * opcode format:
+ * OP [IMMEDIATE]
+ */
+
+/* OP CODES 							*/
+#define HALT 	0x00 	/* Halts CPU 				*/
+#define LOAD0 	0x01	/* Loads byte to R0 from mem[op2] 	*/
+#define LOAD1 	0x02	/* Loads byte to R1 from mem[op2] 	*/
+#define ADD	0x03	/* R0 = R1 + R0 			*/
+#define BEEP 	0x04	/* BEL 					*/
+#define STORE	0x05	/* Stores R0 at mem[PC] 		*/
+#define PRINT	0x06	/* Prints mem[PC] 			*/
+#define MOV0	0x07 	/* Sets R0 to mem[PC] 			*/
+#define MOV1	0x08	/* Sets R1 to mem[PC] 			*/
 
 
 typedef unsigned char byte;
@@ -34,7 +41,7 @@ struct mini_cpu {
 	bool _underflow;
 	bool _signed;
 	bool _halt;	
-		
+
 	/* Memory */
 	char *mem;
 	int mem_size;
@@ -45,7 +52,7 @@ struct mini_cpu {
 
 /**
  * CPU operations
-**/
+ **/
 struct mini_cpu *new_cpu(int memory_size);
 void free_cpu(struct mini_cpu*);
 void cpu_reset(struct mini_cpu*);
@@ -56,7 +63,6 @@ void halt(struct mini_cpu*);
 void add(struct mini_cpu*);
 void store(struct mini_cpu*);
 void print(struct mini_cpu*);
-
 
 /**
  * Memory operations

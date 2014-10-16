@@ -76,12 +76,20 @@ void decode(struct mini_cpu* cpu, byte op_code)
 			cpu->_halt = true;
 			break;
 
-		case LOAD0:
+		case MOV0:
 			cpu->R0 = mem_read(cpu, cpu->PC++);
 			break;
 
-		case LOAD1:
+		case MOV1:
 			cpu->R1 = mem_read(cpu, cpu->PC++);
+			break;
+
+		case LOAD0:
+			cpu->R0 = mem_read(cpu, fetch(cpu));
+			break;
+
+		case LOAD1:
+			cpu->R1 = mem_read(cpu, fetch(cpu));
 			break;
 
 		case ADD:
