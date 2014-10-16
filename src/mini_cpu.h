@@ -65,4 +65,8 @@ byte mem_read(struct mini_cpu*,byte n);
 void mem_write(struct mini_cpu*, byte location, byte b);
 void mem_clear(struct mini_cpu*);
 void mem_print(struct mini_cpu*);
+void load_program(struct mini_cpu*, byte*);
+
 #endif
+
+

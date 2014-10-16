@@ -1,39 +1,34 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include "mini_cpu.h"
-int main()
+
+int main(int argc, char **argv)
 {
+	if(argc < 2) {
+		printf("Supply this program with assembly code!\n");
+		return 0;
+	}
+
 	struct mini_cpu *cpu = new_cpu(255);
+	
+	byte* prog = (byte*)calloc(255, sizeof(byte));
+	int fd = open(argv[1], O_RDONLY);
+	if(fd == -1) {
+		printf("Could read from source program!\n");
+		return 0;
+	}
 
-	mem_write(cpu,250, 0x0);
-	mem_write(cpu,251,0x1); 
+	int c = read(fd, prog, 255);
+	close(fd);
+	printf("%d bytes read. Starting CPU...\n",c);
 
-	mem_write(cpu,252, mem_read(cpu,250)+1);
-	mem_write(cpu,253, mem_read(cpu,251)+1);
+	load_program(cpu, prog);
+	mem_print(cpu);	
 
-	/***	
-	  1 1
-	  2 2
-	  3
-	  5 12
-	  6 12
-	  0
-	 ***/
-
-	mem_write(cpu,1,LOAD0); 	/* R0 = 1 */
-	mem_write(cpu,2,1);
-	mem_write(cpu,3,LOAD1);		/* R1 = 2 */
-	mem_write(cpu,4,2);
-	mem_write(cpu,5,ADD);
-	mem_write(cpu,6,STORE);		/* STORE R0 @ 12 */
-	mem_write(cpu,7,30);
-	mem_write(cpu,8,PRINT);		/* PRINT [12] */
-	mem_write(cpu,9,30);
-	mem_write(cpu,10,HALT);
-	printf("Starting...\n");	
 	run(cpu);
-	printf("Complete...\n");
-
-	mem_print(cpu);
 
 
 	free_cpu(cpu);

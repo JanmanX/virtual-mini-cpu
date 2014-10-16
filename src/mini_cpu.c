@@ -91,7 +91,7 @@ void decode(struct mini_cpu* cpu, byte op_code)
 		case STORE:
 			store(cpu);
 			break;
-		
+
 		case PRINT:
 			print(cpu);
 			break;
@@ -100,6 +100,8 @@ void decode(struct mini_cpu* cpu, byte op_code)
 
 void run(struct mini_cpu* cpu)
 {
+	cpu->PC = 0x01;
+
 	while(cpu->_halt == false) {
 		mem_write(cpu, cpu->_reserved_address, fetch(cpu));
 
@@ -174,4 +176,13 @@ void mem_print(struct mini_cpu *cpu)
 		printf("%3d: 0x%02x\n",i,cpu->mem[i]);
 
 	printf("\n");
+}
+
+void load_program(struct mini_cpu* cpu, byte* prog)
+{
+	int i = 0;
+	byte b = 0;
+	while(b = prog[i++]) {
+		mem_write(cpu, i, b);
+	}	
 }
