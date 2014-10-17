@@ -25,6 +25,9 @@
 #define PRINT	0x06	/* Prints mem[PC] 			*/
 #define MOV0	0x07 	/* Sets R0 to mem[PC] 			*/
 #define MOV1	0x08	/* Sets R1 to mem[PC] 			*/
+#define JMP	0x09	/* Jumps to mem[PC]			*/
+#define JMPE	0x0a	/* Jumps to mem[PC] if R0 == R1		*/
+#define SUB	0x0b	/* R0 = R0 - R1				*/
 
 
 typedef unsigned char byte;
@@ -41,6 +44,7 @@ struct mini_cpu {
 	bool _underflow;
 	bool _signed;
 	bool _halt;	
+	bool _equal;
 
 	/* Memory */
 	char *mem;
@@ -63,7 +67,10 @@ void halt(struct mini_cpu*);
 void add(struct mini_cpu*);
 void store(struct mini_cpu*);
 void print(struct mini_cpu*);
-
+void jmp(struct mini_cpu*);
+void jmpe(struct mini_cpu*);
+void sub(struct mini_cpu*);
+void cmp(struct mini_cpu*);
 /**
  * Memory operations
  **/

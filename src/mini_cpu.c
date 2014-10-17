@@ -37,6 +37,7 @@ struct mini_cpu *new_cpu(int memory_size)
 	cpu->_underflow = false;
 	cpu->_signed = false;
 	cpu->_halt = false;
+	cpu->_equal = false;
 	cpu->_reserved_address = 0;
 	cpu->_address_ceiling = memory_size-2;
 
@@ -62,6 +63,7 @@ void cpu_reset(struct mini_cpu * cpu)
 	cpu->_underflow = false;
 	cpu->_signed = false;
 	cpu->_halt = false;
+	cpu->_equal = false;
 	cpu->_reserved_address = 0;
 	cpu->_address_ceiling = cpu->mem_size-2;
 
@@ -161,6 +163,22 @@ void print(struct mini_cpu* cpu)
 	cpu->R1 = mem_read(cpu, cpu->PC++);
 	cpu->R0 = mem_read(cpu, cpu->R1);
 	printf("%d\n", cpu->R0);
+}
+void jmp(struct mini_cpu *cpu)
+{
+	cpu->PC = mem_read(cpu, cpu->PC++);
+}
+
+void jmpe(struct mini_cpu *cpu)
+{
+	if(cpu->_equal)
+		jmp(cpu);
+		
+}
+
+void sub(struct mini_cpu *cpu)
+{
+	cpu->R0 = cpu->R0 - cpu->R1;
 }
 
 
