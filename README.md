@@ -7,6 +7,7 @@ Virtual CPU emulator inspired by Intel 4001.
 
 Supported instructions
 ======================
+
 HALT	/* Halts CPU 				                */
 LOAD0	/* Loads byte to R0 from mem[op2] 	*/
 LOAD1	/* Loads byte to R1 from mem[op2] 	*/
