@@ -84,13 +84,6 @@ void decode(struct mini_cpu* cpu, byte op_code)
 {
 	if(cpu->_halt == true) return;
 
-#ifdef DEBUG
-	printf("-- PC: %d\tR0: %d\tR1: %d\tOP: %s --\n",
-			cpu->PC,
-			cpu->R0,
-			cpu->R1,
-			OPCODE_STRING[cpu->PC]);
-#endif
 
 	switch(op_code) {
 		case HALT:
@@ -133,6 +126,14 @@ void run(struct mini_cpu* cpu)
 	cpu->PC = 0x01;
 
 	while(cpu->_halt == false) {
+#ifdef DEBUG
+		printf("-- PC: %d\tR0: %d\tR1: %d\tOP: %s --\n",
+				cpu->PC,
+				cpu->R0,
+				cpu->R1,
+				OPCODE_STRING[mem_read(cpu,cpu->PC)]);
+#endif
+
 		mem_write(cpu, cpu->_reserved_address, fetch(cpu));
 
 		decode(cpu, mem_read(cpu,cpu->_reserved_address));
@@ -203,7 +204,8 @@ void mem_print(struct mini_cpu *cpu)
 
 	int i = 0;
 	for(; i < cpu->mem_size; ++i)
-		printf("%3d: 0x%02x\n",i,cpu->mem[i]);
+		if(cpu->mem[i])
+			printf("%3d: 0x%02x\n",i,cpu->mem[i]);
 
 	printf("\n");
 }
