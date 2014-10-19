@@ -7,6 +7,10 @@ STORE	= 5
 PRINT	= 6
 MOV0	= 7
 MOV1 	= 8
+JMP 	= 9
+JMPE	= 10
+SUB	= 11
+CMP	= 12
 
 from sys import argv
 from string import *
@@ -89,6 +93,30 @@ for line in lines:
 		else:
 			file_bytes.append(PRINT)
 			file_bytes.append(int(op[1]))
+	
+	elif op1 == "JMP":	
+		if len(op) < 2:
+			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
+		else:
+			file_bytes.append(JMP)
+			file_bytes.append(int(op[1]))
+
+	elif op1 == "JMPE":	
+		if len(op) < 2:
+			print "[ERROR] Line %d, bad op \"%s\"" % (current_line,line)
+		else:
+			file_bytes.append(JMPE)
+			file_bytes.append(int(op[1]))
+
+	elif op1 == "SUB":	
+		file_bytes.append(SUB)
+
+	elif op1 == "CMP":	
+		file_bytes.append(CMP)
+
+	
+
+
 		
 	current_line += 1
 

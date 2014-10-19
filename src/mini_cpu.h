@@ -28,7 +28,7 @@
 #define JMP	0x09	/* Jumps to mem[PC]			*/
 #define JMPE	0x0a	/* Jumps to mem[PC] if R0 == R1		*/
 #define SUB	0x0b	/* R0 = R0 - R1				*/
-
+#define CMP	0x0c	/* _equal = (R0 == R1)			*/
 
 typedef unsigned char byte;
 typedef byte bool;
@@ -71,6 +71,7 @@ void jmp(struct mini_cpu*);
 void jmpe(struct mini_cpu*);
 void sub(struct mini_cpu*);
 void cmp(struct mini_cpu*);
+
 /**
  * Memory operations
  **/
@@ -78,7 +79,7 @@ byte mem_read(struct mini_cpu*,byte n);
 void mem_write(struct mini_cpu*, byte location, byte b);
 void mem_clear(struct mini_cpu*);
 void mem_print(struct mini_cpu*);
-void load_program(struct mini_cpu*, byte*);
+void load_program(struct mini_cpu*, byte*, int);
 
 
 #endif

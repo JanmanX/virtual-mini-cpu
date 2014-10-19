@@ -9,7 +9,11 @@ char* OPCODE_STRING[] = { "HALT",
 	"STORE",
 	"PRINT",
 	"MOV0",
-	"MOV1"}; 
+	"MOV1",
+	"JMP",
+	"JMPE",
+	"SUB",
+	"CMP"}; 
 
 #endif
 
@@ -119,6 +123,22 @@ void decode(struct mini_cpu* cpu, byte op_code)
 		case PRINT:
 			print(cpu);
 			break;
+
+		case JMP:
+			jmp(cpu);
+			break;
+
+		case JMPE:
+			jmpe(cpu);
+			break;
+
+		case SUB:
+			sub(cpu);
+			break;
+
+		case CMP:
+			cmp(cpu);
+			break;
 	}
 
 }
@@ -173,7 +193,7 @@ void jmpe(struct mini_cpu *cpu)
 {
 	if(cpu->_equal)
 		jmp(cpu);
-		
+
 }
 
 void sub(struct mini_cpu *cpu)
@@ -181,6 +201,10 @@ void sub(struct mini_cpu *cpu)
 	cpu->R0 = cpu->R0 - cpu->R1;
 }
 
+void cmp(struct mini_cpu *cpu)
+{
+	cpu->_equal = (cpu->R0 == cpu->R1) ? true : false;
+}
 
 /**
  * Memory operations
@@ -228,11 +252,10 @@ void mem_print(struct mini_cpu *cpu)
 	printf("\n");
 }
 
-void load_program(struct mini_cpu* cpu, byte* prog)
+
+void load_program(struct mini_cpu* cpu, byte* prog, int size)
 {
 	int i = 0;
-	byte b = 0;
-	while(b = prog[i++]) {
-		mem_write(cpu, i, b);
-	}	
+	for(; i < size; ++i)
+		cpu->mem[i+1] = prog[i];		
 }

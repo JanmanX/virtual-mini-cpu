@@ -24,13 +24,17 @@ int main(int argc, char **argv)
 	int c = read(fd, prog, 255);
 	close(fd);
 	printf("%d bytes read. Starting CPU...\n",c);
+	
+	printf("Printing program:\n");
+	int i = 0;
+	for(; i < c; ++i)
+		printf("0x%x\t", prog[i]);
+	printf("\n");
 
-	load_program(cpu, prog);
+	load_program(cpu, prog, c);
 	run(cpu);
 
-
 	mem_print(cpu);	
-
 
 	free_cpu(cpu);
 	return 0;	
